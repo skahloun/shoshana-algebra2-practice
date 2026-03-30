@@ -338,17 +338,18 @@ function genQ4() {
         },
         {
             text: `Which of the following are factors of x\u2074 \u2212 ${a*a*a*a}?`,
-            answer: `Both (x \u2212 ${a}) and (x + ${a})`,
+            answer: `(x \u2212 ${a}), (x + ${a}), and (x\u00B2 + ${a*a})`,
             options: shuffle([
-                `Both (x \u2212 ${a}) and (x + ${a})`,
+                `(x \u2212 ${a}), (x + ${a}), and (x\u00B2 + ${a*a})`,
                 `Only (x \u2212 ${a})`,
                 `Only (x + ${a})`,
                 `None of them`,
-                `(x \u2212 ${a}), (x + ${a}), and (x\u00B2 + ${a*a})`
+                `Both (x \u2212 ${a}) and (x + ${a})`
             ])
         }
     ];
-    return pick(variants);
+    let v = pick(variants);
+    return { type: 'mc', text: v.text, answer: v.answer, options: v.options };
 }
 
 // ============ Q5: X-intercepts of quadratic f(x) = a(x+h)² + k ============
