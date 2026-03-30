@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shoshana's Algebra II Practice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; padding: 30px 0 20px; color: white; }
+        header h1 { font-size: 2em; margin-bottom: 5px; }
+        header p { opacity: 0.9; font-size: 1.1em; }
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .question-number {
+            background: #f5576c;
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        .question-pts { color: #999; font-size: 0.85em; }
+        .question-text {
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .options label {
+            display: block;
+            padding: 12px 16px;
+            margin-bottom: 8px;
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.05em;
+        }
+        .options label:hover { border-color: #f5576c; background: #fff5f6; }
+        .options input[type="radio"] { margin-right: 10px; }
+        .options label.selected { border-color: #f5576c; background: #fff0f1; }
+        .options label.correct { border-color: #22c55e; background: #f0fdf4; }
+        .options label.incorrect { border-color: #ef4444; background: #fef2f2; }
+        .text-input {
+            width: 140px;
+            padding: 10px 14px;
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-family: inherit;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+        .text-input:focus { outline: none; border-color: #f5576c; }
+        .text-input.correct { border-color: #22c55e; background: #f0fdf4; }
+        .text-input.incorrect { border-color: #ef4444; background: #fef2f2; }
+        .inline-input { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .btn {
+            display: inline-block;
+            padding: 14px 36px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .btn-primary { background: #f5576c; color: white; }
+        .btn-primary:hover { background: #e04458; transform: translateY(-1px); }
+        .btn-success { background: #22c55e; color: white; }
+        .btn-success:hover { background: #16a34a; }
+        .actions { text-align: center; margin: 30px 0; }
+        .score-card { text-align: center; padding: 40px; }
+        .score-big { font-size: 4em; font-weight: 700; color: #f5576c; }
+        .score-big.perfect { color: #22c55e; }
+        .score-label { font-size: 1.2em; color: #666; margin-top: 8px; }
+        .results-detail { margin-top: 24px; text-align: left; }
+        .results-detail .result-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95em;
+        }
+        .result-row .check { color: #22c55e; font-weight: 700; }
+        .result-row .cross { color: #ef4444; font-weight: 700; }
+        .timer {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .history-card { margin-top: 10px; }
+        .history-card h3 { margin-bottom: 12px; color: #f5576c; }
+        .history-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95em;
+        }
+        .graph-options { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+        .graph-option {
+            display: inline-block;
+            border: 2px solid #e8e8e8;
+            border-radius: 10px;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .graph-option:hover { border-color: #f5576c; }
+        .graph-option.selected { border-color: #f5576c; background: #fff0f1; }
+        .graph-option.correct { border-color: #22c55e; background: #f0fdf4; }
+        .graph-option.incorrect { border-color: #ef4444; background: #fef2f2; }
+        .hidden { display: none; }
+        .correction-text {
+            color: #22c55e;
+            font-weight: 600;
+            margin-top: 8px;
+            font-size: 0.95em;
+        }
+        .input-row { margin-bottom: 10px; }
+        @media (max-width: 600px) {
+            .container { padding: 12px; }
+            header h1 { font-size: 1.5em; }
+            .card { padding: 20px; }
+            .score-big { font-size: 3em; }
+            .graph-options { flex-direction: column; align-items: center; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Shoshana's Algebra II Practice</h1>
+        <p>Part 3 - 25 Questions - 40 Minutes</p>
+        <div class="timer" id="timer">40:00</div>
+    </header>
+    <div id="quiz-area"></div>
+    <div class="actions" id="actions">
+        <button class="btn btn-primary" id="submit-btn" onclick="submitQuiz()">Submit Quiz</button>
+    </div>
+    <div id="results-area" class="hidden"></div>
+    <div id="history-area"></div>
+</div>
+
+<script>
+// ============ UTILITY ============
+function randInt(a, b) { return a + Math.floor(Math.random() * (b - a + 1)); }
+function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function shuffle(arr) { let a = [...arr]; for (let i = a.length - 1; i > 0; i--) { let j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function gcd(a, b) { a = Math.abs(a); b = Math.abs(b); return b === 0 ? a : gcd(b, a % b); }
+function fmtFrac(n, d) {
+    if (d < 0) { n = -n; d = -d; }
+    let g = gcd(Math.abs(n), d);
+    n /= g; d /= g;
+    if (d === 1) return `${n}`;
+    return `${n}/${d}`;
+}
+function approxEq(a, b, tol) { return Math.abs(a - b) < (tol || 0.01); }
+function evalFrac(s) {
+    s = s.trim().replace(/\s/g, '');
+    if (s.includes('/')) { let p = s.split('/'); return parseFloat(p[0]) / parseFloat(p[1]); }
+    return parseFloat(s);
+}
+
+let questions = [];
+let timerInterval;
+let timeLeft = 40 * 60;
+let quizSubmitted = false;
+let selectedOptions = {};
+let selectedGraphs = {};
+
+// ============ Q1: X-intercepts of rational function ============
+function genQ1() {
+    // f(x) = (x - a)(x - b) / (x² - c²) where a,b are not ±c
+    let a = randInt(-5, 0);
+    let b = randInt(1, 6);
+    while (b === -a) b = randInt(1, 6);
+    let c = pick([2, 3, 4, 5]);
+    while (c === Math.abs(a) || c === Math.abs(b)) c = pick([2, 3, 4, 5]);
+    // x-intercepts are x = a and x = b
+    let smaller = Math.min(a, b);
+    let larger = Math.max(a, b);
+    // Display: f(x) = (x - a)(2x + ...) / (x² - c²) ... actually let's keep it simple
+    let aStr = a >= 0 ? `x - ${a}` : `x + ${-a}`;
+    let bStr = b >= 0 ? `x - ${b}` : `x + ${-b}`;
+    return {
+        type: 'two_inputs',
+        text: `Find both of the x-intercepts of the function f(x) = (${aStr})(${bStr}) / (x\u00B2 - ${c*c}).`,
+        answer: `x = ${smaller} and x = ${larger}`,
+        smallerAnswer: `${smaller}`,
+        largerAnswer: `${larger}`,
+        validateSmaller: (s) => approxEq(evalFrac(s), smaller, 0.01),
+        validateLarger: (s) => approxEq(evalFrac(s), larger, 0.01),
+        labels: ['Smaller intercept at x =', 'Larger intercept at x =']
+    };
+}
+
+// ============ Q2: Solve quadratic equation ============
+function genQ2() {
+    // ax² + bx + c = 0 with nice rational roots
+    let r1n = randInt(-6, -1), r1d = pick([1, 2, 3]);
+    let r2n = randInt(1, 6), r2d = pick([1, 2, 3]);
+    // (r1d*x - r1n)(r2d*x - r2n) = 0
+    // r1d*r2d*x² - (r1d*r2n + r2d*r1n)x + r1n*r2n = 0
+    let A = r1d * r2d;
+    let B = -(r1d * r2n + r2d * r1n);
+    let C = r1n * r2n;
+    let sol1 = r1n / r1d;
+    let sol2 = r2n / r2d;
+    let smaller = Math.min(sol1, sol2);
+    let larger = Math.max(sol1, sol2);
+    let smallerStr = fmtFrac(r1n < r2n ? r1n : r2n, r1n < r2n ? r1d : r2d);
+    let largerStr = fmtFrac(r1n < r2n ? r2n : r2d === 1 ? r2n : r2n, r1n < r2n ? r2d : r2d);
+    // Fix: compute properly
+    if (sol1 < sol2) {
+        smallerStr = r1d === 1 ? `${r1n}` : fmtFrac(r1n, r1d);
+        largerStr = r2d === 1 ? `${r2n}` : fmtFrac(r2n, r2d);
+    } else {
+        smallerStr = r2d === 1 ? `${r2n}` : fmtFrac(r2n, r2d);
+        largerStr = r1d === 1 ? `${r1n}` : fmtFrac(r1n, r1d);
+    }
+    let bSign = B >= 0 ? '+' : '-';
+    let cSign = C >= 0 ? '+' : '-';
+    let eq = `${A}x\u00B2 ${bSign} ${Math.abs(B)}x ${cSign} ${Math.abs(C)} = 0`;
+    return {
+        type: 'two_inputs',
+        text: `The equation ${eq} has two solutions. What are they?`,
+        answer: `x = ${smallerStr} and x = ${largerStr}`,
+        smallerAnswer: smallerStr,
+        largerAnswer: largerStr,
+        validateSmaller: (s) => approxEq(evalFrac(s), smaller, 0.01),
+        validateLarger: (s) => approxEq(evalFrac(s), larger, 0.01),
+        labels: ['Smaller solution x =', 'Larger solution x =']
+    };
+}
+
+// ============ Q3: Rational inequality ============
+function genQ3() {
+    // x/(x-a) + b < 0 type
+    let a = pick([1, 2, 3, 4, 5]);
+    let b = pick([2, 3, 4, 5]);
+    // x/(x-a) + b < 0 => (x + b(x-a))/(x-a) < 0 => ((1+b)x - ab)/(x-a) < 0
+    let num_coeff = 1 + b;
+    let num_const = a * b;
+    let critical = num_const / num_coeff; // numerator = 0
+    // Sign analysis: (num_coeff*x - num_const)/(x - a) < 0
+    // Critical points: x = num_const/num_coeff and x = a
+    // Since num_coeff > 0, numerator positive when x > critical
+    let cp1 = Math.min(critical, a);
+    let cp2 = Math.max(critical, a);
+    // For this setup, critical < a always since ab/(1+b) < a
+    // So solution is: x < critical or x > a... no wait
+    // (num_coeff*x - ab)/(x-a) < 0
+    // + when both pos or both neg
+    // num = 0 at x = ab/(1+b), denom = 0 at x = a
+    // ab/(1+b) < a since b/(1+b) < 1
+    // For x < ab/(1+b): num < 0, denom < 0 => quotient > 0 (not < 0)
+    // For ab/(1+b) < x < a: num > 0, denom < 0 => quotient < 0 (YES)
+    // For x > a: num > 0, denom > 0 => quotient > 0 (not < 0)
+    let lo = critical;
+    let hi = a;
+    let loStr, hiStr;
+    if (num_const % num_coeff === 0) {
+        loStr = `${num_const / num_coeff}`;
+    } else {
+        let g = gcd(num_const, num_coeff);
+        loStr = `${num_const/g}/${num_coeff/g}`;
+    }
+    hiStr = `${a}`;
+    let answer = `${loStr} < x < ${hiStr}`;
+    let options = shuffle([
+        answer,
+        `x < ${loStr}`,
+        `x > ${hiStr}`,
+        `x < ${loStr} or x > ${hiStr}`,
+        `${loStr} \u2264 x \u2264 ${hiStr}`
+    ]);
+    return {
+        type: 'mc',
+        text: `What is the solution set to the inequality x/(x \u2212 ${a}) + ${b} < 0?`,
+        answer: answer,
+        options: options
+    };
+}
+
+// ============ Q4: Factoring polynomials ============
+function genQ4() {
+    let a = pick([2, 3, 4, 5]);
+    let variants = [
+        {
+            text: `Which of the following are factors of x\u00B3 \u2212 ${a*a*a}?`,
+            answer: `Only (x \u2212 ${a})`,
+            options: shuffle([
+                `Only (x \u2212 ${a})`,
+                `Both (x \u2212 ${a}) and (x + ${a})`,
+                `(x \u2212 ${a}), (x + ${a}), and (x\u00B2 + ${a*a})`,
+                `None of them`,
+                `Only (x + ${a})`
+            ])
+        },
+        {
+            text: `Which of the following are factors of x\u00B3 + ${a*a*a}?`,
+            answer: `Only (x + ${a})`,
+            options: shuffle([
+                `Only (x + ${a})`,
+                `Both (x \u2212 ${a}) and (x + ${a})`,
+                `(x \u2212 ${a}), (x + ${a}), and (x\u00B2 + ${a*a})`,
+                `None of them`,
+                `Only (x \u2212 ${a})`
+            ])
+        },
+        {
+            text: `Which of the following are factors of x\u2074 \u2212 ${a*a*a*a}?`,
+            answer: `Both (x \u2212 ${a}) and (x + ${a})`,
+            options: shuffle([
+                `Both (x \u2212 ${a}) and (x + ${a})`,
+                `Only (x \u2212 ${a})`,
+                `Only (x + ${a})`,
+                `None of them`,
+                `(x \u2212 ${a}), (x + ${a}), and (x\u00B2 + ${a*a})`
+            ])
+        }
+    ];
+    return pick(variants);
+}
+
+// ============ Q5: X-intercepts of quadratic f(x) = a(x+h)² + k ============
+function genQ5() {
+    let h = randInt(-5, 5);
+    let a = pick([-5, -3, -2, -1, 1, 2, 3, 5]);
+    // Need k such that -k/a > 0 for real roots
+    // roots at x = -h ± sqrt(-k/a)
+    let sqVal = pick([1, 4, 9, 16, 25]);
+    let k = -a * sqVal; // so -k/a = sqVal, sqrt = sqVal^0.5
+    let sqrtVal = Math.sqrt(sqVal);
+    let r1 = -h - sqrtVal;
+    let r2 = -h + sqrtVal;
+    let left = Math.min(r1, r2);
+    let right = Math.max(r1, r2);
+    let aStr = a === 1 ? '' : a === -1 ? '\u2212' : `${a}`;
+    let hStr = h >= 0 ? `(x + ${h})` : `(x \u2212 ${-h})`;
+    if (h === 0) hStr = 'x';
+    let kSign = k >= 0 ? '+' : '\u2212';
+    return {
+        type: 'two_inputs',
+        text: `Find the x-intercepts of the function f(x) = ${aStr}${hStr}\u00B2 ${kSign} ${Math.abs(k)}.`,
+        answer: `x = ${left} and x = ${right}`,
+        smallerAnswer: `${left}`,
+        largerAnswer: `${right}`,
+        validateSmaller: (s) => approxEq(evalFrac(s), left, 0.01),
+        validateLarger: (s) => approxEq(evalFrac(s), right, 0.01),
+        labels: ['Leftmost intercept x =', 'Rightmost intercept x =']
+    };
+}
+
+// ============ Q6: Number of real roots ============
+function genQ6() {
+    let variants = [
+        { text: 'The polynomial x(x\u00B2 \u2212 4)(x\u00B2 + 4) has how many real roots?', answer: '3' },
+        { text: 'The polynomial x\u00B2(x\u00B2 \u2212 9) has how many real roots?', answer: '3' },
+        { text: 'The polynomial (x\u00B2 + 1)(x\u00B2 \u2212 1) has how many real roots?', answer: '2' },
+        { text: 'The polynomial x(x \u2212 1)(x + 2)(x\u00B2 + 3) has how many real roots?', answer: '3' },
+        { text: 'The polynomial (x\u00B2 \u2212 4)(x\u00B2 \u2212 9) has how many real roots?', answer: '4' },
+        { text: 'The polynomial x\u00B3(x\u00B2 + 5) has how many real roots?', answer: '1' },
+        { text: 'The polynomial (x\u00B2 + 1)(x\u00B2 + 4) has how many real roots?', answer: '0' },
+        { text: 'The polynomial x(x\u00B2 \u2212 1)(x\u00B2 + 1) has how many real roots?', answer: '3' },
+    ];
+    let v = pick(variants);
+    let options = shuffle(['0', '1', '2', '3', '4', '5']);
+    if (!options.includes(v.answer)) options[0] = v.answer;
+    options = shuffle(options.slice(0, 5));
+    if (!options.includes(v.answer)) options.push(v.answer);
+    return { type: 'mc', text: v.text, answer: v.answer, options: shuffle(options) };
+}
+
+// ============ Q7: Exponent simplification ============
+function genQ7() {
+    let variants = [
+        {
+            text: '(3p\u00B2q\u00B3)(\u2212p\u2074q)\u207B\u00B3 =',
+            answer: '\u22123 / (p\u00B9\u2070)',
+            options: ['\u22123 / (p\u00B9\u2070)', '\u22123p\u2076q\u2076', '3p\u00B2q', '\u22123p\u00B2', '3p\u00B9\u2070q\u2076']
+        },
+        {
+            text: '(2a\u00B3b\u00B2)\u00B2 / (4a\u00B2b) =',
+            answer: 'a\u2074b\u00B3',
+            options: ['a\u2074b\u00B3', '2a\u2074b\u00B3', 'a\u2076b\u2074', '2a\u2075b', 'a\u00B2b']
+        },
+        {
+            text: '(x\u207B\u00B2y\u00B3)\u00B2 =',
+            answer: 'y\u2076 / x\u2074',
+            options: ['y\u2076 / x\u2074', 'x\u2074y\u2076', 'y\u2076x\u2074', 'y\u2075 / x\u2074', 'x\u00B2y\u2076']
+        },
+        {
+            text: '(5m\u00B3n\u207B\u00B2)\u00B2 =',
+            answer: '25m\u2076 / n\u2074',
+            options: ['25m\u2076 / n\u2074', '25m\u2076n\u2074', '10m\u2076 / n\u2074', '5m\u2076 / n\u2074', '25m\u2079 / n\u2074']
+        },
+        {
+            text: '(4x\u00B2y)\u207B\u00B9 \u00B7 (2xy\u00B3) =',
+            answer: 'y\u00B2 / (2x)',
+            options: ['y\u00B2 / (2x)', '2xy\u00B2', '8x\u00B3y\u2074', 'y\u00B2 / (8x)', '2y\u00B2 / x']
+        },
+    ];
+    let v = pick(variants);
+    return { type: 'mc', text: v.text, answer: v.answer, options: shuffle(v.options) };
+}
+
+// ============ Q8: Domain of radical function ============
+function genQ8() {
+    let a = pick([2, 3, 4, 5]);
+    let a2 = a * a;
+    let variants = [
+        {
+            text: `Which of the following is the domain of the function \u221A(${a2} \u2212 x\u00B2)?`,
+            answer: `\u2212${a} \u2264 x \u2264 ${a}`,
+            options: [`\u2212${a} \u2264 x \u2264 ${a}`, `x \u2264 \u2212${a}`, `x \u2265 ${a}`, `x \u2264 \u2212${a} or x \u2265 ${a}`, `All real numbers`]
+        },
+        {
+            text: `Which of the following is the domain of the function \u221A(x\u00B2 \u2212 ${a2})?`,
+            answer: `x \u2264 \u2212${a} or x \u2265 ${a}`,
+            options: [`x \u2264 \u2212${a} or x \u2265 ${a}`, `\u2212${a} \u2264 x \u2264 ${a}`, `x \u2265 ${a}`, `x \u2264 \u2212${a}`, `All real numbers`]
+        },
+        {
+            text: `Which of the following is the domain of the function \u221A(x + ${a})?`,
+            answer: `x \u2265 \u2212${a}`,
+            options: [`x \u2265 \u2212${a}`, `x \u2265 ${a}`, `x \u2264 ${a}`, `All real numbers`, `x > 0`]
+        },
+    ];
+    let v = pick(variants);
+    return { type: 'mc', text: v.text, answer: v.answer, options: shuffle(v.options) };
+}
+
+// ============ Q9: Simplify radical expression ============
+function genQ9() {
+    let variants = [
+        {
+            text: 'If y > 0, then \u221A(25y\u2074 \u2212 9y\u2074) =',
+            answer: '4y\u00B2',
+            options: ['4y\u00B2', '16y\u2074', '2y\u00B2', '4y', '16y\u00B2']
+        },
+        {
+            text: 'If x > 0, then \u221A(36x\u00B2 \u2212 16x\u00B2) =',
+            answer: '2x\u221A5',
+            options: ['2x\u221A5', '20x', '4x\u221A5', '10x', '\u221A(20x\u00B2)']
+        },
+        {
+            text: 'If a > 0, then \u221A(49a\u00B2) \u2212 \u221A(16a\u00B2) =',
+            answer: '3a',
+            options: ['3a', '\u221A(33a\u00B2)', '33a', '11a', '7a \u2212 4a']
+        },
+        {
+            text: 'If x > 0, then \u221A(100x\u2074) =',
+            answer: '10x\u00B2',
+            options: ['10x\u00B2', '50x\u00B2', '10x', '100x\u00B2', '50x\u2074']
+        },
+        {
+            text: '\u221A(18) + \u221A(50) =',
+            answer: '8\u221A2',
+            options: ['8\u221A2', '68', '\u221A68', '8\u221A4', '6\u221A2']
+        },
+    ];
+    let v = pick(variants);
+    return { type: 'mc', text: v.text, answer: v.answer, options: shuffle(v.options) };
+}
+
+// ============ Q10: Graph reading - where is f(x) < 0 ============
+function genQ10() {
+    // Parabola opening up with x-intercepts at a and b
+    let a = randInt(-4, -1);
+    let b = randInt(1, 5);
+    let answer = `${a} < x < ${b}`;
+    let options = shuffle([
+        answer,
+        `x < ${a} or x > ${b}`,
+        `x < ${a}`,
+        `x > ${b}`,
+        `${a} \u2264 x \u2264 ${b}`
+    ]);
+    return {
+        type: 'mc_graph',
+        text: `Suppose f(x) is a function whose graph is shown here. The x-intercepts are (${a}, 0) and (${b}, 0). Then f(x) < 0 whenever:`,
+        answer: answer,
+        options: options,
+        drawGraph: (ctx, w, h) => {
+            // Draw axes
+            let cx = w * (-a) / (b - a + 4) + w * 2 / (b - a + 4);
+            let cy = h * 0.6;
+            ctx.strokeStyle = '#999';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+            ctx.moveTo(cx, 0); ctx.lineTo(cx, h);
+            ctx.stroke();
+            // Draw parabola y = (x-a)(x-b)
+            ctx.strokeStyle = '#f5576c';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            let first = true;
+            for (let px = 0; px < w; px++) {
+                let x = a - 2 + (b - a + 4) * px / w;
+                let y = (x - a) * (x - b);
+                let py = cy - y * (h * 0.08);
+                if (py < -10 || py > h + 10) { first = true; continue; }
+                if (first) { ctx.moveTo(px, py); first = false; }
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+            // Labels
+            ctx.fillStyle = '#333';
+            ctx.font = '12px Inter, sans-serif';
+            let ax = w * (a - a + 2) / (b - a + 4);
+            let bx = w * (b - a + 2) / (b - a + 4);
+            ctx.fillText(`(${a},0)`, ax - 15, cy + 15);
+            ctx.fillText(`(${b},0)`, bx - 5, cy + 15);
+        }
+    };
+}
+
+// ============ Q11: Area of rectangle under curve ============
+function genQ11() {
+    // f(x) = x² - bx + c, width from a to a+w, height = f(a)
+    let coeff_b = pick([2, 4, 6]);
+    let coeff_c = pick([8, 12, 16, 20]);
+    // f(x) = x² - bx + c
+    let a_val = randInt(0, 1); // could be decimal
+    let a_dec = pick([0, 0.5]);
+    let a = a_val + a_dec;
+    let b_dec = pick([0.5, 1, 1.5]);
+    let b = a + b_dec;
+    // Width = b - a
+    let width = b - a;
+    // Height = f(a) since the rectangle sits under the curve at x=a
+    let height = a * a - coeff_b * a + coeff_c;
+    let area = width * height;
+    let areaRounded = Math.round(area * 100) / 100;
+    return {
+        type: 'input',
+        text: `The curved line in the graph below is the function f(x) = x\u00B2 \u2212 ${coeff_b}x + ${coeff_c}.<br>If a = ${a} and b = ${b}, what is the area of the rectangle with corners at (a, 0), (b, 0), (b, f(a)), and (a, f(a))?`,
+        answer: `${areaRounded}`,
+        validate: (s) => approxEq(parseFloat(s), areaRounded, 0.05)
+    };
+}
+
+// ============ Q12: Number of intersection points ============
+function genQ12() {
+    let variants = [
+        {
+            text: 'The graphs of the equations y = x\u00B2 and y = 2x \u2212 1 intersect in how many points?',
+            answer: '1',  // x²=2x-1 => x²-2x+1=0 => (x-1)²=0
+        },
+        {
+            text: 'The graphs of the equations y = x\u00B2 and y = x + 2 intersect in how many points?',
+            answer: '2',  // x²=x+2 => x²-x-2=0 => (x-2)(x+1)=0
+        },
+        {
+            text: 'The graphs of the equations y = x\u00B2 and y = \u22121 intersect in how many points?',
+            answer: '0',
+        },
+        {
+            text: 'The graphs of the equations y = x\u00B2 and y = 4 intersect in how many points?',
+            answer: '2',
+        },
+        {
+            text: 'The graphs of the equations y = x\u00B2 + 1 and y = x intersect in how many points?',
+            answer: '0', // x²+1=x => x²-x+1=0, disc = 1-4 < 0
+        },
+        {
+            text: 'The graphs of the equations y = x\u00B2 and y = 3x \u2212 2 intersect in how many points?',
+            answer: '2', // x²-3x+2=0 => (x-1)(x-2)=0
+        },
+    ];
+    let v = pick(variants);
+    let options = shuffle(['0', '1', '2', 'The question cannot be answered with the information given']);
+    return { type: 'mc', text: v.text, answer: v.answer, options: options };
+}
+
+// ============ Q13: Rectangle word problem ============
+function genQ13() {
+    // Length = width * k + extra, perimeter = P
+    // 2(w + kw + extra) = P => 2w(1+k) + 2*extra = P => w = (P - 2*extra) / (2(1+k))
+    let k = 2;
+    let extra = pick([3, 5, 7, 9, 11]);
+    let w = randInt(4, 12);
+    let l = k * w + extra;
+    let P = 2 * (w + l);
+    return {
+        type: 'input',
+        text: `Suppose the length of a certain rectangle is ${extra} meters more than twice its width and the perimeter is ${P} meters.<br>How many meters must the width be?`,
+        answer: `${w}`,
+        validate: (s) => approxEq(parseFloat(s), w, 0.01)
+    };
+}
+
+// ============ Q14: System of linear equations ============
+function genQ14() {
+    let variants = [
+        {
+            text: 'The graph of the system of equations x \u2212 2y = 1 and 2x \u2212 4y = 6 consists of:',
+            answer: 'Two parallel lines which don\'t meet',
+            options: ['Two parallel lines which don\'t meet', 'Two lines which meet at exactly one point', 'One line (infinitely many solutions)', 'Two perpendicular lines']
+        },
+        {
+            text: 'The graph of the system of equations 2x + y = 5 and 4x + 2y = 10 consists of:',
+            answer: 'One line (infinitely many solutions)',
+            options: ['One line (infinitely many solutions)', 'Two parallel lines which don\'t meet', 'Two lines which meet at exactly one point', 'Two perpendicular lines']
+        },
+        {
+            text: 'The graph of the system of equations x + y = 3 and x \u2212 y = 1 consists of:',
+            answer: 'Two lines which meet at exactly one point',
+            options: ['Two lines which meet at exactly one point', 'Two parallel lines which don\'t meet', 'One line (infinitely many solutions)', 'Two perpendicular lines']
+        },
+        {
+            text: 'The graph of the system of equations 3x \u2212 y = 2 and 6x \u2212 2y = 7 consists of:',
+            answer: 'Two parallel lines which don\'t meet',
+            options: ['Two parallel lines which don\'t meet', 'Two lines which meet at exactly one point', 'One line (infinitely many solutions)', 'Two perpendicular lines']
+        },
+        {
+            text: 'The graph of the system of equations x + 3y = 6 and 2x + 6y = 12 consists of:',
+            answer: 'One line (infinitely many solutions)',
+            options: ['One line (infinitely many solutions)', 'Two parallel lines which don\'t meet', 'Two lines which meet at exactly one point', 'No solutions']
+        },
+    ];
+    let v = pick(variants);
+    return { type: 'mc', text: v.text, answer: v.answer, options: shuffle(v.options) };
+}
+
+// ============ Q15: Even function from graph ============
+function genQ15() {
+    // Draw 4 graphs, one is even (symmetric about y-axis)
+    const funcs = [
+        { label: 'even', fn: (x) => x*x - 1, isEven: true },
+        { label: 'odd', fn: (x) => x*x*x, isEven: false },
+        { label: 'neither1', fn: (x) => x*x + x, isEven: false },
+        { label: 'neither2', fn: (x) => Math.abs(x) + x/2, isEven: false },
+    ];
+    let shuffled = shuffle(funcs);
+    let correctIdx = shuffled.findIndex(f => f.isEven);
+    return {
+        type: 'graph_pick',
+        text: 'A function is even if f(\u2212x) = f(x) for each x in the domain of f. Of the following, which is even?',
+        answer: correctIdx,
+        funcs: shuffled
+    };
+}
+
+// ============ Q16: Identify exponential graph ============
+function genQ16() {
+    let base = pick([2, 3]);
+    const allFuncs = [
+        { label: `y = ${base}\u02E3`, fn: (x) => Math.pow(base, x) },
+        { label: `y = \u2212${base}\u02E3`, fn: (x) => -Math.pow(base, x) },
+        { label: `y = log(x)`, fn: (x) => x > 0 ? Math.log(x) : null },
+        { label: `y = x\u00B2`, fn: (x) => x*x },
+    ];
+    let correctIdx = 0;
+    return {
+        type: 'graph_pick',
+        text: `Of the following, which best represents the graph of y = ${base}\u02E3?`,
+        answer: correctIdx,
+        funcs: allFuncs
+    };
+}
+
+// ============ Q17: Quadratic inequality ============
+function genQ17() {
+    // x² + bx < c => x² + bx - c < 0
+    let r1 = randInt(-7, -2);
+    let r2 = randInt(1, 6);
+    // (x - r1)(x - r2) < 0 => x² - (r1+r2)x + r1*r2 < 0
+    // rewrite as x² + bx < c
+    let sum = r1 + r2;
+    let prod = r1 * r2;
+    let bCoeff = -sum;
+    let c = -prod;
+    let bStr = bCoeff >= 0 ? `+ ${bCoeff}` : `\u2212 ${-bCoeff}`;
+    let answer = `${r1} < x < ${r2}`;
+    let options = shuffle([
+        answer,
+        `x < ${r1} or x > ${r2}`,
+        `x < ${r1}`,
+        `x > ${r2}`,
+        `${r1} \u2264 x \u2264 ${r2}`
+    ]);
+    return {
+        type: 'mc',
+        text: `The inequality x\u00B2 ${bStr}x < ${c} is equivalent to:`,
+        answer: answer,
+        options: options
+    };
+}
+
+// ============ Q18: Identify function from graph ============
+function genQ18() {
+    const funcs = [
+        { label: 'y = 3\u02E3', fn: (x) => Math.pow(3, x), type: 'exp' },
+        { label: 'y = ln(x)', fn: (x) => x > 0.1 ? Math.log(x) : null, type: 'log' },
+        { label: 'y = |x|', fn: (x) => Math.abs(x), type: 'abs' },
+        { label: 'y = \u221Ax', fn: (x) => x >= 0 ? Math.sqrt(x) : null, type: 'sqrt' },
+    ];
+    let correctIdx = randInt(0, funcs.length - 1);
+    let correct = funcs[correctIdx];
+    let options = funcs.map(f => f.label);
+    return {
+        type: 'mc_graph',
+        text: 'Consider the graph shown here. This is the graph of:',
+        answer: correct.label,
+        options: shuffle(options),
+        drawGraph: (ctx, w, h) => {
+            let cx = w * 0.3;
+            let cy = h * 0.7;
+            ctx.strokeStyle = '#999';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, cy); ctx.lineTo(w, cy);
+            ctx.moveTo(cx, 0); ctx.lineTo(cx, h);
+            ctx.stroke();
+            ctx.strokeStyle = '#f5576c';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            let first = true;
+            for (let px = 0; px < w; px++) {
+                let x = (px - cx) / (w * 0.15);
+                let y = correct.fn(x);
+                if (y === null || !isFinite(y) || Math.abs(y) > 10) { first = true; continue; }
+                let py = cy - y * (h * 0.08);
+                if (py < -10 || py > h + 10) { first = true; continue; }
+                if (first) { ctx.moveTo(px, py); first = false; }
+                else ctx.lineTo(px, py);
+            }
+            ctx.stroke();
+        }
+    };
+}
+
+// ============ Q19: Logarithm solve for x ============
+function genQ19() {
+    // log_a(x + c) = z => x = a^z - c
+    let a = pick(['a', 'b']);
+    let c = pick([2, 3, 4, 5]);
+    let answer = `${a}\u1DBB \u2212 ${c}`;
+    let options = shuffle([
+        `${a}\u1DBB \u2212 ${c}`,
+        `log_${a}(z) \u2212 ${c}`,
+        `z\u1D43 \u2212 ${c}`,
+        `${a}\u1DBB + ${c}`,
+        `z \u00B7 ${a} \u2212 ${c}`
+    ]);
+    return {
+        type: 'mc',
+        text: `If log<sub>${a}</sub>(x + ${c}) = z, then x =`,
+        answer: answer,
+        options: options
+    };
+}
+
+// ============ Q20: Composition of functions ============
+function genQ20() {
+    let a = randInt(2, 5);
+    let b = randInt(1, 7);
+    let answer = `(${a}x + ${b})\u00B2`;
+    let options = shuffle([
+        answer,
+        `${a}x\u00B2 + ${b}`,
+        `${a*a}x\u00B2 + ${b*b}`,
+        `${a}x\u00B2 + ${b}x`,
+        `x\u00B2 + ${a}x + ${b}`
+    ]);
+    return {
+        type: 'mc',
+        text: `If f(x) = ${a}x + ${b} and g(x) = x\u00B2, then g(f(x)) =`,
+        answer: answer,
+        options: options
+    };
+}
+
+// ============ Q21: Absolute value inequality ============
+function genQ21() {
+    let a = randInt(2, 5);
+    let b = randInt(5, 20);
+    let c_num = pick([1, 3, 5]);
+    let c_den = 2;
+    let c = c_num / c_den;
+    // |ax - b| <= c => -c <= ax - b <= c => (b-c)/a <= x <= (b+c)/a
+    let lo_num = 2 * b - c_num;
+    let lo_den = 2 * a;
+    let hi_num = 2 * b + c_num;
+    let hi_den = 2 * a;
+    let g1 = gcd(lo_num, lo_den);
+    let g2 = gcd(hi_num, hi_den);
+    let loStr = lo_den / g1 === 1 ? `${lo_num/g1}` : `${lo_num/g1}/${lo_den/g1}`;
+    let hiStr = hi_den / g2 === 1 ? `${hi_num/g2}` : `${hi_num/g2}/${hi_den/g2}`;
+    let answer = `${loStr} \u2264 x \u2264 ${hiStr}`;
+    let options = shuffle([
+        answer,
+        `x \u2264 ${loStr} or x \u2265 ${hiStr}`,
+        `\u2212${hiStr} \u2264 x \u2264 ${loStr}`,
+        `x \u2264 ${hiStr}`,
+        `${loStr} < x < ${hiStr}`
+    ]);
+    return {
+        type: 'mc',
+        text: `The inequality |${a}x \u2212 ${b}| \u2264 ${c_num}/${c_den} is equivalent to:`,
+        answer: answer,
+        options: options
+    };
+}
+
+// ============ Q22: Expand and match (x+k)² ============
+function genQ22() {
+    // (x + k)² = x² + 2kx + k² and we're told = x² + bx + k²
+    // So 2k = b => k = b/2
+    let b_choices = [-8, -6, -4, -3, -2, 2, 3, 4, 6, 8];
+    let b = pick(b_choices);
+    let k = b / 2;
+    let kStr = Number.isInteger(k) ? `${k}` : fmtFrac(b, 2);
+    let bSign = b >= 0 ? '+' : '\u2212';
+    return {
+        type: 'input',
+        text: `Suppose that (x + k)\u00B2 = x\u00B2 ${bSign} ${Math.abs(b)}x + k\u00B2 for all values of x.<br>Then k =`,
+        answer: kStr,
+        validate: (s) => approxEq(evalFrac(s), k, 0.01)
+    };
+}
+
+// ============ Q23: Solve h(x) = value ============
+function genQ23() {
+    let a = pick([3, 5, 7]);
+    let b = pick([2, 3, 4]);
+    // h(x) = (a - x) / b, solve h(x) = target
+    let target = pick([1, 2, 3, 4]);
+    // (a - x)/b = target => a - x = b*target => x = a - b*target
+    let answer = a - b * target;
+    return {
+        type: 'input',
+        text: `If h(x) = (${a} \u2212 x) / ${b}, then for which value of x does h(x) = ${target}?`,
+        answer: `${answer}`,
+        validate: (s) => approxEq(evalFrac(s), answer, 0.01)
+    };
+}
+
+// ============ Q24: Cylinder surface area ============
+function genQ24() {
+    let answer = '2\u03C0rh + 2\u03C0r\u00B2';
+    let options = shuffle([
+        '2\u03C0rh + 2\u03C0r\u00B2',
+        '2\u03C0rh + \u03C0r\u00B2',
+        '\u03C0r\u00B2h',
+        '\u03C0rh + \u03C0r\u00B2',
+        '2\u03C0rh'
+    ]);
+    let svg = `<svg width="120" height="140" viewBox="0 0 120 140" style="display:block;margin:10px auto;">
+        <ellipse cx="60" cy="30" rx="40" ry="12" fill="none" stroke="#f5576c" stroke-width="2"/>
+        <line x1="20" y1="30" x2="20" y2="110" stroke="#f5576c" stroke-width="2"/>
+        <line x1="100" y1="30" x2="100" y2="110" stroke="#f5576c" stroke-width="2"/>
+        <ellipse cx="60" cy="110" rx="40" ry="12" fill="none" stroke="#f5576c" stroke-width="2"/>
+        <text x="108" y="75" font-size="14" fill="#333">h</text>
+        <text x="55" y="125" font-size="14" fill="#333">r</text>
+        <line x1="60" y1="110" x2="100" y2="110" stroke="#333" stroke-width="1" stroke-dasharray="4"/>
+    </svg>`;
+    return {
+        type: 'mc',
+        text: `The cylinder shown below has both a bottom and a top. Its surface area in terms of h and r is:${svg}`,
+        answer: answer,
+        options: options
+    };
+}
+
+// ============ Q25: Logarithmic equation ============
+function genQ25() {
+    // log10(x) + log10(x - a) = 1 => log10(x(x-a)) = 1 => x(x-a) = 10
+    // x² - ax - 10 = 0
+    // We need nice solutions. Let's pick roots r1, r2 where r1*r2 = -10 and r1+r2 = a
+    let pairs = [
+        { r1: 5, r2: -2, a: 3 },  // x²-3x-10=0 => (x-5)(x+2)=0, x=5 (x=-2 rejected)
+        { r1: -1, r2: 10, a: 9 }, // need x(x-9)=10 => x²-9x-10=0 => (x-10)(x+1)=0, x=10
+    ];
+    let p = pick(pairs);
+    let positiveRoot = Math.max(p.r1, p.r2);
+    return {
+        type: 'input',
+        text: `Solve the equation log<sub>10</sub>(x) + log<sub>10</sub>(x \u2212 ${p.a}) = 1 for x.<br>x =`,
+        answer: `${positiveRoot}`,
+        validate: (s) => approxEq(parseFloat(s), positiveRoot, 0.01)
+    };
+}
+
+// ============ QUIZ ENGINE ============
+
+function generateQuiz() {
+    questions = [];
+    const generators = [
+        genQ1, genQ2, genQ3, genQ4, genQ5, genQ6, genQ7, genQ8, genQ9,
+        genQ10, genQ11, genQ12, genQ13, genQ14, genQ15, genQ16, genQ17,
+        genQ18, genQ19, genQ20, genQ21, genQ22, genQ23, genQ24, genQ25
+    ];
+    generators.forEach(gen => questions.push(gen()));
+    selectedOptions = {};
+    selectedGraphs = {};
+    quizSubmitted = false;
+    document.getElementById('submit-btn').textContent = 'Submit Quiz';
+    document.getElementById('submit-btn').className = 'btn btn-primary';
+    document.getElementById('submit-btn').onclick = submitQuiz;
+    document.getElementById('results-area').classList.add('hidden');
+    document.getElementById('actions').classList.remove('hidden');
+    timeLeft = 40 * 60;
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+    renderQuiz();
+    window.scrollTo(0, 0);
+}
+
+function renderQuiz() {
+    let html = '';
+    questions.forEach((q, i) => {
+        html += `<div class="card" id="q${i}">`;
+        html += `<div class="question-header"><span class="question-number">Question ${i+1}</span><span class="question-pts">1 pt</span></div>`;
+        html += `<div class="question-text">${q.text}</div>`;
+
+        if (q.type === 'mc' || q.type === 'mc_graph') {
+            if (q.type === 'mc_graph' && q.drawGraph) {
+                html += `<canvas id="graphCanvas${i}" width="300" height="200" style="display:block;margin:0 auto 16px;border:1px solid #eee;border-radius:8px;"></canvas>`;
+            }
+            html += `<div class="options" id="opts${i}">`;
+            q.options.forEach((opt, j) => {
+                html += `<label id="opt${i}_${j}" onclick="selectOption(${i}, ${j})">
+                    <input type="radio" name="q${i}" value="${j}"> ${opt}
+                </label>`;
+            });
+            html += `</div>`;
+        } else if (q.type === 'input') {
+            html += `<div class="inline-input">
+                <input type="text" class="text-input" id="input${i}" placeholder="Answer">
+            </div>`;
+        } else if (q.type === 'two_inputs') {
+            let labels = q.labels || ['Smaller value =', 'Larger value ='];
+            html += `<div style="display:flex;flex-direction:column;gap:12px;">
+                <div class="input-row">${labels[0]} <input type="text" class="text-input" id="input${i}_small" placeholder=""></div>
+                <div class="input-row">${labels[1]} <input type="text" class="text-input" id="input${i}_large" placeholder=""></div>
+            </div>`;
+        } else if (q.type === 'graph_pick') {
+            html += `<div class="graph-options" id="graphs${i}"></div>`;
+        }
+        html += `<div class="correction-text hidden" id="correction${i}"></div>`;
+        html += `</div>`;
+    });
+    document.getElementById('quiz-area').innerHTML = html;
+
+    // Draw canvases for mc_graph
+    questions.forEach((q, i) => {
+        if (q.type === 'mc_graph' && q.drawGraph) {
+            let canvas = document.getElementById(`graphCanvas${i}`);
+            if (canvas) {
+                let ctx = canvas.getContext('2d');
+                q.drawGraph(ctx, canvas.width, canvas.height);
+            }
+        }
+    });
+
+    // Draw graph_pick canvases
+    questions.forEach((q, i) => {
+        if (q.type === 'graph_pick') {
+            let container = document.getElementById(`graphs${i}`);
+            q.funcs.forEach((f, j) => {
+                let div = document.createElement('div');
+                div.className = 'graph-option';
+                div.id = `graph${i}_${j}`;
+                div.onclick = () => selectGraph(i, j);
+                let canvas = document.createElement('canvas');
+                canvas.width = 160;
+                canvas.height = 130;
+                let ctx = canvas.getContext('2d');
+                let cx = 80, cy = 80;
+                // axes
+                ctx.strokeStyle = '#ccc';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(0, cy); ctx.lineTo(160, cy);
+                ctx.moveTo(cx, 0); ctx.lineTo(cx, 130);
+                ctx.stroke();
+                // function
+                ctx.strokeStyle = '#f5576c';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                let first = true;
+                for (let px = 0; px < 160; px++) {
+                    let x = (px - cx) / 25;
+                    let y = f.fn(x);
+                    if (y === null || !isFinite(y) || Math.abs(y) > 8) { first = true; continue; }
+                    let py = cy - y * 15;
+                    if (py < -10 || py > 140) { first = true; continue; }
+                    if (first) { ctx.moveTo(px, py); first = false; }
+                    else ctx.lineTo(px, py);
+                }
+                ctx.stroke();
+                div.appendChild(canvas);
+                container.appendChild(div);
+            });
+        }
+    });
+}
+
+function selectOption(qi, oi) {
+    if (quizSubmitted) return;
+    selectedOptions[qi] = oi;
+    document.querySelectorAll(`#opts${qi} label`).forEach((o, j) => {
+        o.classList.toggle('selected', j === oi);
+    });
+}
+
+function selectGraph(qi, gi) {
+    if (quizSubmitted) return;
+    selectedGraphs[qi] = gi;
+    document.querySelectorAll(`#graphs${qi} .graph-option`).forEach((g, j) => {
+        g.classList.toggle('selected', j === gi);
+    });
+}
+
+function submitQuiz() {
+    quizSubmitted = true;
+    if (timerInterval) clearInterval(timerInterval);
+    let score = 0;
+    let results = [];
+
+    questions.forEach((q, i) => {
+        let correct = false;
+
+        if (q.type === 'mc' || q.type === 'mc_graph') {
+            let sel = selectedOptions[i];
+            if (sel !== undefined) {
+                correct = (q.options[sel] === q.answer);
+                document.querySelectorAll(`#opts${i} label`).forEach((o, j) => {
+                    o.classList.remove('selected');
+                    if (q.options[j] === q.answer) o.classList.add('correct');
+                    if (j === sel && !correct) o.classList.add('incorrect');
+                });
+            } else {
+                document.querySelectorAll(`#opts${i} label`).forEach((o, j) => {
+                    if (q.options[j] === q.answer) o.classList.add('correct');
+                });
+            }
+        } else if (q.type === 'input') {
+            let input = document.getElementById(`input${i}`);
+            correct = q.validate(input.value);
+            input.classList.add(correct ? 'correct' : 'incorrect');
+            if (!correct) {
+                document.getElementById(`correction${i}`).textContent = `Correct answer: ${q.answer}`;
+                document.getElementById(`correction${i}`).classList.remove('hidden');
+            }
+        } else if (q.type === 'two_inputs') {
+            let smallInput = document.getElementById(`input${i}_small`);
+            let largeInput = document.getElementById(`input${i}_large`);
+            let sc = q.validateSmaller(smallInput.value);
+            let lc = q.validateLarger(largeInput.value);
+            correct = sc && lc;
+            smallInput.classList.add(sc ? 'correct' : 'incorrect');
+            largeInput.classList.add(lc ? 'correct' : 'incorrect');
+            if (!correct) {
+                document.getElementById(`correction${i}`).textContent = `Correct answer: ${q.answer}`;
+                document.getElementById(`correction${i}`).classList.remove('hidden');
+            }
+        } else if (q.type === 'graph_pick') {
+            let sel = selectedGraphs[i];
+            correct = (sel === q.answer);
+            document.querySelectorAll(`#graphs${i} .graph-option`).forEach((g, j) => {
+                g.classList.remove('selected');
+                if (j === q.answer) g.classList.add('correct');
+                if (j === sel && !correct) g.classList.add('incorrect');
+            });
+        }
+
+        if (correct) score++;
+        results.push({ num: i + 1, correct, question: q.text.replace(/<[^>]*>/g, ' ').substring(0, 60) });
+    });
+
+    let total = 25;
+    let perfect = score === total;
+    let resultsHtml = `<div class="card score-card">
+        <div class="score-big ${perfect ? 'perfect' : ''}">${score}/${total}</div>
+        <div class="score-label">${perfect ? 'PERFECT SCORE! Amazing!' : score >= 20 ? 'Great job! Almost there!' : score >= 15 ? 'Good effort! Keep practicing!' : 'Keep going, you\'ll get there!'}</div>
+        <div class="results-detail">`;
+    results.forEach(r => {
+        resultsHtml += `<div class="result-row">
+            <span>Q${r.num}: ${r.question}...</span>
+            <span class="${r.correct ? 'check' : 'cross'}">${r.correct ? '\u2713' : '\u2717'}</span>
+        </div>`;
+    });
+    resultsHtml += `</div></div>`;
+    document.getElementById('results-area').innerHTML = resultsHtml;
+    document.getElementById('results-area').classList.remove('hidden');
+
+    saveResult(score);
+    renderHistory();
+
+    document.getElementById('submit-btn').textContent = 'Generate New Test';
+    document.getElementById('submit-btn').className = 'btn btn-success';
+    document.getElementById('submit-btn').onclick = generateQuiz;
+    document.getElementById('results-area').scrollIntoView({ behavior: 'smooth' });
+}
+
+function updateTimer() {
+    let m = Math.floor(timeLeft / 60);
+    let s = timeLeft % 60;
+    document.getElementById('timer').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+    if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        if (!quizSubmitted) submitQuiz();
+    }
+    timeLeft--;
+}
+
+function getHistory() {
+    try { return JSON.parse(localStorage.getItem('algebra2History') || '[]'); }
+    catch { return []; }
+}
+
+function saveResult(score) {
+    let history = getHistory();
+    history.push({ date: new Date().toLocaleString(), score: score, total: 25 });
+    localStorage.setItem('algebra2History', JSON.stringify(history));
+}
+
+function renderHistory() {
+    let history = getHistory();
+    if (history.length === 0) return;
+    let html = `<div class="card history-card"><h3>Previous Attempts</h3>`;
+    let recent = history.slice(-10).reverse();
+    recent.forEach((h, i) => {
+        let pct = Math.round(h.score / h.total * 100);
+        html += `<div class="history-row">
+            <span>#${history.length - i} \u2014 ${h.date}</span>
+            <span style="font-weight:600;color:${pct === 100 ? '#22c55e' : pct >= 70 ? '#f5576c' : '#ef4444'}">${h.score}/${h.total} (${pct}%)</span>
+        </div>`;
+    });
+    html += `</div>`;
+    document.getElementById('history-area').innerHTML = html;
+}
+
+generateQuiz();
+renderHistory();
+</script>
+</body>
+</html>
